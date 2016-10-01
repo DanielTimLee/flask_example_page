@@ -20,7 +20,8 @@ def install():
 
 def run_server():
     with prefix(env.location):
-        run('python app.py '+port)
+        with prefix(env.activate):
+            run('nohup python app.py '+port+'&')
 
 def deploy():
     pre_install()
@@ -29,7 +30,7 @@ def deploy():
 
 def source_update():
     with prefix(env.location):
-        run('git pull origin')
+        run('git pull origin master')
 
 def env_update():
     with prefix(env.location):
