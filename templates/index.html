@@ -1,0 +1,22 @@
+
+{% extends 'layout.html' %}
+{% block content %}
+<h1>
+<i class="{{ icon }} icon"></i>
+방문 카운터
+</h1>
+      {% if 'count' not in request.cookies %}
+        <a href="{{ request.url }}">새로고침하기</a>
+      {% else %}
+<div class="ui {{ style }} statistic">
+  <div class="label">
+    Views
+  </div>
+  <div class="value">
+     {{ request.cookies['count'] }}
+  </div>
+</div> 
+       <h4> <a href="{{ request.url }}">새로고침하기</a></h4>
+        {% endif %}
+
+        {% endblock %}
