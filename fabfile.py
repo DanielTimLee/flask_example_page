@@ -1,21 +1,42 @@
 from fabric.api import *
+import sys
+project = 'flask_example_page'
+port = '8807'
 
-env.user = 'daniel-rasp'
-env.hosts = ['27.35.13.110:227']
 env.activate = 'source venv/bin/activate && source .env'
+env.location = 'cd ~/' + project
 
 def pre_install():
     sudo('apt-get install -y git')
-    sudo('pip install autoenv virtualenv')
-    run('echo "source `which activate.sh`" >> ~/.bashrc')
+    sudo('pip install virtualenv')
 
-def create_venv():
-    pass
+def install():
+    run('rm -rf ' + project)
+    run('git clone https://github.com/DanielTimLee/' + project)
+    with prefix(env.location):
+        run('virtualenv --python=python3 venv')
+        with prefix(env.activate):
+            run('pip install -r requirements.txt')
+
+def run_server():
+    with prefix(env.location):
+        run('python app.py '+port)
+
+def deploy():
+    pre_install()
+    install()
+    run_server()
+
+def source_update():
+    with prefix(env.location):
+        run('git pull origin')
 
 def env_update():
-    local("pip install -r requirements.txt")
+    with prefix(env.location):
+        with prefix(env.activate):
+            run("pip install -r requirements.txt")
 
-
-
-def hello():
-    print("Hello world!")
+def update():
+    source_update()
+    env_update()
+    run_server()

@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, make_response
 from random import randrange as rr
+import sys
 app=Flask(__name__)
 
 @app.route('/')
@@ -18,4 +19,4 @@ def cookie():
     resp.set_cookie('count',str(i))
     return resp
 
-app.run(port=8807,host='0.0.0.0',debug=True)
+app.run(port=int(sys.argv[1]),host='0.0.0.0',debug=True)
